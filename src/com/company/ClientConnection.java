@@ -4,16 +4,17 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ClientConnection {
-    private static int serverPort = 8000;
+    private static int serverPort = 8001;
     private static String server_IP;
     private static ServerSocket server;
     private static Socket client;
     private static BufferedReader in;
     private static PrintWriter out;
-    private static String line;
+    private static String command;
 
     public static void listenSocket(){
         try{
@@ -32,9 +33,20 @@ public class ClientConnection {
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 out = new PrintWriter(client.getOutputStream(), true);
 
-                line = in.readLine();
-                System.out.println(line);
-                out.println(line);
+                command = in.readLine();
+
+                switch(command){
+                    case "register":
+                        ServerAPI.addUser(new ArrayList<>(Arrays.asList(in.readLine().split(","))));
+                        out.println("Registered");
+                        break;
+                    case "login":
+                        out.println(ServerAPI.isValidCredential(in.readLine()));
+                        break;
+                    default:
+                        out.println(command);
+                }
+
                 System.out.println("Returned ping to client");
             } catch (Exception e) {
                 System.out.println(Arrays.toString(e.getStackTrace()));

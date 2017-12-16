@@ -11,17 +11,24 @@ public class ServerAPI {
     private static Statement st;
     private static ResultSet rs;
     private static final String getAll = "SELECT * FROM Users;";
-    private static final String insertUser = "INSERT INTO Users (Username, PIN, Name, Email, Phone, City, Country)" +
+    private static final String insertUser = "INSERT INTO Users (Username, PIN, Email, Phone, City, Country)" +
             "VALUES(";
     private static final String deleteUser = "DELETE FROM Users WHERE UserID = ";
     private static final String lastUser = "SELECT MAX(UserID) FROM Users;";
     private static final String resetIncrement = "ALTER TABLE Users AUTO_INCREMENT = ";
+    private static final String checkCredential = "SELECT * FROM Users WHERE Email = '";
 
     private static String query;
 
-    private static ArrayList<String> createUser(int ID, String username, String PIN, String name, String email, String
-                                               phone, String city, String country){
-        return new ArrayList<>(Arrays.asList(Integer.toString(ID), username, PIN, name, email, phone, city, country));
+    public static ArrayList<String> createUser(ResultSet result){
+        try {
+            return new ArrayList<>(Arrays.asList(Integer.toString(result.getInt("UserID")),
+                    result.getString("Username"), result.getString("PIN"), result.getString("Email"),
+                    result.getString("Phone"), result.getString("city"), result.getString("Country")));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void getUsers(){
@@ -31,16 +38,7 @@ public class ServerAPI {
             rs = st.executeQuery(query);
             while (rs.next())
             {
-                int id = rs.getInt("UserID");
-                String username = rs.getString("Username");
-                String PIN = rs.getString("PIN");
-                String name = rs.getString("Name");
-                String email = rs.getString("Email");
-                String phone = rs.getString("Phone");
-                String city = rs.getString("City");
-                String country = rs.getString("Country");
-
-                System.out.println(createUser(id, username, PIN, name, email, phone, city, country));
+                System.out.println(createUser(rs));
             }
             st.close();
         } catch (Exception e) {
@@ -49,8 +47,8 @@ public class ServerAPI {
     }
 
     public static void addUser(ArrayList<String> user){
-        query = insertUser + "'" + user.get(1) + "'";
-        for (int i = 2; i < user.size(); i++) {
+        query = insertUser + "'" + user.get(0) + "'";
+        for (int i = 1; i < user.size(); i++) {
             query += ", '" + user.get(i) + "'";
         }
         query += ");";
@@ -101,5 +99,22 @@ public class ServerAPI {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<String> isValidCredential(String credential){
+        query = checkCredential + credential.split(":")[0] + "' AND PIN = " + credential.split(":")[1];
+        System.out.println(query);
+        try{
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            st.close();
+            if (rs.next()){
+                return createUser(rs);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Rejected Login");
+        return null;
     }
 }

@@ -15,6 +15,7 @@ public class DatabaseConnection {
 
     public static void main(String[] args){
         initializeConnection();
+        ServerAPI.getUsers();
         ClientConnection.listenSocket();
     }
 
