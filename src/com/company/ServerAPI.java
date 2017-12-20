@@ -20,7 +20,7 @@ public class ServerAPI {
 
     private static String query;
 
-    public static ArrayList<String> createUser(ResultSet result){
+    private static ArrayList<String> createUser(ResultSet result){
         try {
             return new ArrayList<>(Arrays.asList(Integer.toString(result.getInt("UserID")),
                     result.getString("Username"), result.getString("PIN"), result.getString("Email"),
@@ -103,7 +103,7 @@ public class ServerAPI {
 
     public static ArrayList<String> isValidCredential(String credential){
         query = checkCredential + credential.split(":")[0] + "' AND PIN = " + credential.split(":")[1];
-        System.out.println(query);
+
         try{
             st = DatabaseConnection.connection.createStatement();
             rs = st.executeQuery(query);
