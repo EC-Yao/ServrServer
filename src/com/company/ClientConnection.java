@@ -43,6 +43,9 @@ public class ClientConnection {
                     case "login":
                         out.println(ServerAPI.isValidCredential(in.readLine()));
                         break;
+                    case "create_service":
+                        ServerAPI.addService(new ArrayList<>(Arrays.asList(in.readLine().split(","))));
+                        out.println("Successfully added service");
                     default:
                         out.println(command);
                 }

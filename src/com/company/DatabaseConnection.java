@@ -1,6 +1,8 @@
 package com.company;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DatabaseConnection {
 
@@ -15,7 +17,11 @@ public class DatabaseConnection {
 
     public static void main(String[] args){
         initializeConnection();
+        ServerAPI.addService(new ArrayList<>(Arrays.asList("1", "Alpha Tester", "Testing for alpha", "$1.99")));
         ServerAPI.getUsers();
+        ServerAPI.getServices();
+        ServerAPI.deleteService(1);
+        ServerAPI.setAutoIncrementServices(1);
         ClientConnection.listenSocket();
     }
 
