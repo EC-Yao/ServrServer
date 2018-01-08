@@ -1,5 +1,6 @@
 package com.company;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,21 +11,27 @@ public class ServerAPI {
 
     private static Statement st;
     private static ResultSet rs;
-    private static    final String getAllUsers = "SELECT * FROM Users;";
-    private static    final String getAllServices = "SELECT * FROM Services;";
+
+    private static final String getAllUsers = "SELECT * FROM Users;";
+    private static final String getAllServices = "SELECT * FROM Services;";
 
     private static final String insertUser = "INSERT INTO Users (Username, PIN, Email, Phone, City, Country)" +
             "VALUES(";
     private static final String deleteUser = "DELETE FROM Users WHERE UserID = ";
     private static final String lastUser = "SELECT MAX(UserID) FROM Users;";
+
     private static final String resetIncrementUsers = "ALTER TABLE Users AUTO_INCREMENT = ";
     private static final String resetIncrementServices = "ALTER TABLE Services AUTO_INCREMENT = ";
     private static final String checkCredential = "SELECT * FROM Users WHERE Email = '";
+
+    private static final String flushServices = "DELETE FROM Services;";
     private static final String addService = "INSERT INTO Services (UserID, ServiceName, ServiceDescription, Price) " +
             "VALUES(";
     private static final String deleteService = "DELETE FROM Services WHERE ServiceID = ";
+    private static final String getUserServices = "SELECT * FROM Services WHERE UserID = ";
 
     private static String query;
+    private static ArrayList<ArrayList<String>> serviceQuery;
 
     private static ArrayList<String> createUser(ResultSet result){
         try {
@@ -157,8 +164,6 @@ public class ServerAPI {
         }
         query += ");";
 
-        System.out.println(query);
-
         try {
             st = DatabaseConnection.connection.createStatement();
             rs = st.executeQuery(query);
@@ -190,6 +195,39 @@ public class ServerAPI {
             rs = st.executeQuery(query);
             st.close();
             System.out.println("Successfully reset auto-increment to " + increment);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<ArrayList<String>> getUserServices(int userID){
+        query = getUserServices + userID + ";";
+        serviceQuery = new ArrayList<>();
+
+        try {
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next())
+            {
+                serviceQuery.add(createService(rs));
+            }
+            st.close();
+
+            System.out.println(serviceQuery);
+            return serviceQuery;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void flushServices(){
+        query = flushServices;
+
+        try {
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("Successfully flushed services table");
         } catch (Exception e){
             e.printStackTrace();
         }

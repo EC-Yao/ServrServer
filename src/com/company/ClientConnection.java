@@ -46,6 +46,11 @@ public class ClientConnection {
                     case "create_service":
                         ServerAPI.addService(new ArrayList<>(Arrays.asList(in.readLine().split(","))));
                         out.println("Successfully added service");
+                    case "delete_service":
+                        ServerAPI.deleteService(Integer.parseInt(in.readLine()));
+                        out.println("Successfully deleted service");
+                    case "personal_services":
+                        out.println(ServerAPI.getUserServices(Integer.parseInt(in.readLine())));
                     default:
                         out.println(command);
                 }

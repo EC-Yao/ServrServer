@@ -17,11 +17,14 @@ public class DatabaseConnection {
 
     public static void main(String[] args){
         initializeConnection();
+        ServerAPI.flushServices();
+        ServerAPI.setAutoIncrementServices(1);
         ServerAPI.addService(new ArrayList<>(Arrays.asList("1", "Alpha Tester", "Testing for alpha", "$1.99")));
+        ServerAPI.addService(new ArrayList<>(Arrays.asList("1", "Alpha Alpha Tester", "Testing for alpha alpha", "$11.99")));
+        ServerAPI.addService(new ArrayList<>(Arrays.asList("2", "Beta Tester", "Testing for beta", "$2.99")));
         ServerAPI.getUsers();
         ServerAPI.getServices();
-        ServerAPI.deleteService(1);
-        ServerAPI.setAutoIncrementServices(1);
+        ServerAPI.getUserServices(3);
         ClientConnection.listenSocket();
     }
 
