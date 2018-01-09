@@ -51,6 +51,8 @@ public class ClientConnection {
                         out.println("Successfully deleted service");
                     case "personal_services":
                         out.println(ServerAPI.getUserServices(Integer.parseInt(in.readLine())));
+                    case "search_services":
+                        out.println(ServerAPI.searchServices(in.readLine()));
                     default:
                         out.println(command);
                 }

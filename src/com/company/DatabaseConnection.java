@@ -22,9 +22,11 @@ public class DatabaseConnection {
         ServerAPI.addService(new ArrayList<>(Arrays.asList("1", "Alpha Tester", "Testing for alpha", "$1.99")));
         ServerAPI.addService(new ArrayList<>(Arrays.asList("1", "Alpha Alpha Tester", "Testing for alpha alpha", "$11.99")));
         ServerAPI.addService(new ArrayList<>(Arrays.asList("2", "Beta Tester", "Testing for beta", "$2.99")));
+        ServerAPI.addService(new ArrayList<>(Arrays.asList("3", "Cheesecake Eater", "Eating cheesecake professionally", "$2.99")));
         ServerAPI.getUsers();
         ServerAPI.getServices();
         ServerAPI.getUserServices(3);
+        ServerAPI.searchServices("Alpha Cheesecake");
         ClientConnection.listenSocket();
     }
 

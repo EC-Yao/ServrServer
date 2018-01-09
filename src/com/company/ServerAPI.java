@@ -30,8 +30,11 @@ public class ServerAPI {
     private static final String deleteService = "DELETE FROM Services WHERE ServiceID = ";
     private static final String getUserServices = "SELECT * FROM Services WHERE UserID = ";
 
+    private static final String searchServices = "SELECT * FROM SERVICES WHERE ServiceName LIKE ";
+
     private static String query;
     private static ArrayList<ArrayList<String>> serviceQuery;
+    private static ArrayList<String> keywordQuery;
 
     private static ArrayList<String> createUser(ResultSet result){
         try {
@@ -231,5 +234,32 @@ public class ServerAPI {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<ArrayList<String>> searchServices(String searchQuery){
+        serviceQuery = new ArrayList<>();
+        keywordQuery = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
+        query = searchServices + "'%" + keywordQuery.get(0) + "%'";
+
+        for (int i = 1; i < keywordQuery.size(); i++) {
+            query += " OR ServiceName LIKE '%" + keywordQuery.get(i) + "%'";
+        }
+        query += ";";
+
+        try {
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next())
+            {
+                serviceQuery.add(createService(rs));
+            }
+            st.close();
+
+            System.out.println(serviceQuery);
+            return serviceQuery;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
