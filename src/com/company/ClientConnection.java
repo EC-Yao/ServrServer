@@ -29,35 +29,7 @@ public class ClientConnection {
 
         while (true){
             try{
-                client = server.accept();
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                out = new PrintWriter(client.getOutputStream(), true);
-
-                command = in.readLine();
-
-                switch(command){
-                    case "register":
-                        ServerAPI.addUser(new ArrayList<>(Arrays.asList(in.readLine().split(","))));
-                        out.println("Registered");
-                        break;
-                    case "login":
-                        out.println(ServerAPI.isValidCredential(in.readLine()));
-                        break;
-                    case "create_service":
-                        ServerAPI.addService(new ArrayList<>(Arrays.asList(in.readLine().split(","))));
-                        out.println("Successfully added service");
-                    case "delete_service":
-                        ServerAPI.deleteService(Integer.parseInt(in.readLine()));
-                        out.println("Successfully deleted service");
-                    case "personal_services":
-                        out.println(ServerAPI.getUserServices(Integer.parseInt(in.readLine())));
-                    case "search_services":
-                        out.println(ServerAPI.searchServices(in.readLine()));
-                    default:
-                        out.println(command);
-                }
-
-                System.out.println("Returned ping to client");
+                new EchoThread(server.accept()).start();
             } catch (Exception e) {
                 System.out.println(Arrays.toString(e.getStackTrace()));
             }
