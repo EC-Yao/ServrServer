@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EchoThread extends Thread {
-    protected Socket socket;
+    private Socket socket;
     private static BufferedReader in;
     private static PrintWriter out;
     private static String command;
@@ -44,6 +44,8 @@ public class EchoThread extends Thread {
                     out.println(ServerAPI.getUserServices(Integer.parseInt(in.readLine())));
                 case "search_services":
                     out.println(ServerAPI.searchServices(in.readLine()));
+                case "stream_service":
+                    out.println(ServerAPI.getStreamServices());
                 default:
                     out.println(command);
             }

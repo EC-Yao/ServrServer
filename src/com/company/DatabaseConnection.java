@@ -27,6 +27,7 @@ public class DatabaseConnection {
         ServerAPI.getServices();
         ServerAPI.getUserServices(3);
         ServerAPI.searchServices("Alpha Cheesecake");
+        ServerAPI.getStreamServices();
         ClientConnection.listenSocket();
     }
 

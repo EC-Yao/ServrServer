@@ -31,6 +31,7 @@ public class ServerAPI {
     private static final String getUserServices = "SELECT * FROM Services WHERE UserID = ";
 
     private static final String searchServices = "SELECT * FROM SERVICES WHERE ServiceName LIKE ";
+    private static final String getStreamServices = "SELECT * FROM Services ORDER BY ServiceID DESC LIMIT 10;";
 
     private static String query;
     private static ArrayList<ArrayList<String>> serviceQuery;
@@ -247,6 +248,27 @@ public class ServerAPI {
         query += ";";
 
         try {
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next())
+            {
+                serviceQuery.add(createService(rs));
+            }
+            st.close();
+
+            System.out.println(serviceQuery);
+            return serviceQuery;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ArrayList<ArrayList<String>> getStreamServices(){
+        serviceQuery = new ArrayList<>();
+        query = getStreamServices;
+
+        try{
             st = DatabaseConnection.connection.createStatement();
             rs = st.executeQuery(query);
             while (rs.next())
