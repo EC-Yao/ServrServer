@@ -46,6 +46,8 @@ public class EchoThread extends Thread {
                     out.println(ServerAPI.searchServices(in.readLine()));
                 case "stream_service":
                     out.println(ServerAPI.getStreamServices());
+                case "get_user":
+                    out.println(ServerAPI.getUser(Integer.parseInt(in.readLine())));
                 default:
                     out.println(command);
             }

@@ -18,6 +18,7 @@ public class ServerAPI {
     private static final String insertUser = "INSERT INTO Users (Username, PIN, Email, Phone, City, Country)" +
             "VALUES(";
     private static final String deleteUser = "DELETE FROM Users WHERE UserID = ";
+    private static final String getUser = "SELECT * FROM Users WHERE UserID = ";
     private static final String lastUser = "SELECT MAX(UserID) FROM Users;";
 
     private static final String resetIncrementUsers = "ALTER TABLE Users AUTO_INCREMENT = ";
@@ -131,6 +132,22 @@ public class ServerAPI {
         }
     }
 
+    public static ArrayList<String> getUser(int id){
+        query = getUser + id + ";";
+
+        try {
+            st = DatabaseConnection.connection.createStatement();
+            rs = st.executeQuery(query);
+            st.close();
+            if (rs.next()){
+                return createUser(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void setAutoIncrementUsers(int increment){
         query = resetIncrementUsers + increment + ";";
 
@@ -239,7 +256,11 @@ public class ServerAPI {
 
     public static ArrayList<ArrayList<String>> searchServices(String searchQuery){
         serviceQuery = new ArrayList<>();
-        keywordQuery = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
+        if(searchQuery.contains(" ")){
+            keywordQuery = new ArrayList<>(Arrays.asList(searchQuery.split(" ")));
+        } else {
+            keywordQuery = new ArrayList<>(Arrays.asList(searchQuery));
+        }
         query = searchServices + "'%" + keywordQuery.get(0) + "%'";
 
         for (int i = 1; i < keywordQuery.size(); i++) {
