@@ -7,6 +7,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** December 20, 2017
+ *  Eddy Yao
+ *
+ *      Displays currently logged in users information
+ */
+
 public class ClientConnection {
     private static int serverPort = 8001;
     private static String server_IP;

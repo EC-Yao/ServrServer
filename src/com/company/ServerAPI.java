@@ -7,6 +7,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** December 13, 2017
+ *  Eddy Yao
+ *
+ *      Displays currently logged in users information
+ */
+
 public class ServerAPI {
 
     private static Statement st;

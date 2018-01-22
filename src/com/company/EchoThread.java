@@ -9,6 +9,12 @@ import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** January 10, 2018
+ *  Eddy Yao
+ *
+ *      Displays currently logged in users information
+ */
+
 public class EchoThread extends Thread {
     private Socket socket;
     private static BufferedReader in;
